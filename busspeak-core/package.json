@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/Dylankjy/BusSpeak#readme",
   "dependencies": {
-    "chalk": "^5.1.2",
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^6.6.0",
@@ -30,8 +29,6 @@
     "luxon": "^3.0.4",
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.3",
-    "require-dir-all": "^0.4.15",
-    "string-strip-html": "^11.6.15",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.5.0",
     "uuid": "^8.3.2"
