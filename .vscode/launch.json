@@ -12,7 +12,19 @@
                 "<node_internals>/**"
             ],
             "restart": true,
-            "program": "${workspaceFolder}\\busspeak-core\\app.js",
+            "program": "${workspaceFolder}\\busspeak-core",
+            "runtimeExecutable": "nodemon",
+            "args": ["--inspect"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug BusSpeak Melody Service",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "restart": true,
+            "program": "${workspaceFolder}\\busspeak-melody",
             "runtimeExecutable": "nodemon",
             "args": ["--inspect"]
         }

@@ -13,5 +13,5 @@ io.on('connection', (socket) => {
 })
 
 app.listen(3000, () => {
-    console.log(`BusSpeak Sing to Me Service - Listening on port ${env.PORT}`)
+    console.log(`BusSpeak Melody Service - Listening on port ${env.PORT}`)
 })
