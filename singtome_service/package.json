@@ -1,0 +1,14 @@
+{
+  "name": "singtome_service",
+  "version": "1.0.0",
+  "description": "A websocket server for BusSpeak's 'Sing to Me'",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dylan Kok",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "socket.io": "^4.5.4"
+  }
+}
