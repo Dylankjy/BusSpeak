@@ -1,4 +1,5 @@
 // Load environment
+require('dotenv').config()
 const env = require('./app/config')
 
 // Express
@@ -30,6 +31,9 @@ const webserver = () => {
 
     // Swagger API Docs
     app.use(`/v1/docs`, swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+    // Start socket client
+    require('./app/socket')
 }
 
 webserver()
