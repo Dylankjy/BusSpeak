@@ -24,6 +24,15 @@ const config = {
         SERVICE_DESCRIPTION: 'You can change this description in /app/config/index.js:config.constants.SERVICE_DESCRIPTION',
         API_VERSION: '1.0',
         API_BASE_URL: '/v1/api'
+    },
+
+    socketClient: {
+        ENDPOINT: process.env.SOCKET_ENDPOINT || 'ws://localhost:5000',
+        OPTIONS: {
+            reconnectionDelayMax: 5000,
+            reconnection: true,
+            reconnectionAttempts: 9999
+        }
     }
 }
 
