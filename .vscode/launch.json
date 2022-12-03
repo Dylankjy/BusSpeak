@@ -14,7 +14,8 @@
             "restart": true,
             "program": "${workspaceFolder}\\busspeak-core",
             "runtimeExecutable": "nodemon",
-            "args": ["--inspect"]
+            "args": ["--inspect"],
+            "envFile": "${workspaceFolder}\\busspeak-core\\.env"
         },
         {
             "type": "node",
@@ -26,7 +27,8 @@
             "restart": true,
             "program": "${workspaceFolder}\\busspeak-melody",
             "runtimeExecutable": "nodemon",
-            "args": ["--inspect"]
+            "args": ["--inspect"],
+            "envFile": "${workspaceFolder}\\busspeak-melody\\.env"
         }
     ]
 }
