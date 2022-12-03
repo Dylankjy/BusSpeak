@@ -4,6 +4,9 @@ const config = {
     // Application
     DEBUG_MODE: process.env.DEBUG_MODE || (inspector.url() !== undefined) ? true : false,
 
+    // BusSpeak Core
+    BUS_STOP_CODE: process.env.BUS_STOP_CODE || '55509',
+
     // Webserver
     HOSTNAME: process.env.HOSTNAME || 'localhost',
     PORT: process.env.PORT || 5000,
@@ -27,7 +30,7 @@ const config = {
     },
 
     socketClient: {
-        ENDPOINT: process.env.SOCKET_ENDPOINT || 'ws://localhost:5000',
+        ENDPOINT: process.env.SOCKET_ENDPOINT || 'http://127.0.0.1:5010',
         OPTIONS: {
             reconnectionDelayMax: 5000,
             reconnection: true,
