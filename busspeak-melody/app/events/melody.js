@@ -1,5 +1,5 @@
 module.exports = (socket) => {
-    socket.on('bus_stop_connect', (data) => {
+    socket.on('busstop_connect', (data) => {
         // Check whether data.stopID is integer
         if (Number.isInteger(data.stopID)) {
             console.log(`BusSpeak Core at ID ${data.stopID} has connected`)

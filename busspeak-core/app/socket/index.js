@@ -9,7 +9,7 @@ const socket = io(env.socketClient.ENDPOINT, {
 
 socket.on('connect', () => {
     console.log(`Socket connected to ${env.socketClient.ENDPOINT} with ID ${env.BUS_STOP_CODE}`)
-    socket.emit('bus_stop_connect', { stopID: env.BUS_STOP_CODE })
+    socket.emit('busstop_connect', { stopID: env.BUS_STOP_CODE })
 })
 
 require('./error_handler')(socket)
