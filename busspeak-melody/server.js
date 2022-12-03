@@ -1,18 +1,19 @@
 require('dotenv').config()
 const env = require('./app/config')
 
-const app = require('express')()
-const http = require('http').Server(app)
-const io = require('socket.io')(http)
+const express = require('express')
+const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 
 app.get('/', (req, res) => {
-    return res.send('Hello World!')
+    return res.json({ status: 200, service_name: 'BusSpeak Melody Websocket Service', owner: 'BusSpeak' })
 })
 
-io.on('connection', (socket) => {
-    console.log('a user connected')
+app.all('*', (req, res) => {
+    return res.redirect('/')
 })
 
-app.listen(env.PORT, () => {
+server.listen(env.PORT, () => {
     console.log(`BusSpeak Melody Service - Listening on port ${env.PORT}`)
 })
