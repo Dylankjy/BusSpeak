@@ -1,9 +1,11 @@
 module.exports = (socket) => {
-    socket.on('busStopConnect', (data) => {
-        // Check whether data.busStopCode is integer
-        if (Number.isInteger(data.busStopCode)) {
-            console.log(`BusSpeak Core at ID ${data.busStopCode} has connected`)
-            return socket.join(`busStop-${data.busStopCode}`)
+    socket.on('bus_stop_connect', (data) => {
+        // Check whether data.stopID is integer
+        if (Number.isInteger(data.stopID)) {
+            console.log(`BusSpeak Core at ID ${data.stopID} has connected`)
+            return socket.join(data.stopID)
         }
+
+        socket.emit('req_error', { code: 'INVALID_STOPID', description: 'stopID provided is invalid.' })
     })
 }

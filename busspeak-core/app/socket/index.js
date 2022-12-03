@@ -9,8 +9,10 @@ const socket = io(env.socketClient.ENDPOINT, {
 
 socket.on('connect', () => {
     console.log(`Socket connected to ${env.socketClient.ENDPOINT} with ID ${env.BUS_STOP_CODE}`)
-    socket.emit('busStopConnect', { busStopCode: env.socketClient.BUS_STOP_ID })
+    socket.emit('bus_stop_connect', { stopID: env.BUS_STOP_CODE })
 })
 
 require('./error_handler')(socket)
 
+// Events
+require('./events/melody')(socket)
