@@ -29,6 +29,7 @@
     "luxon": "^3.0.4",
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.3",
+    "socket.io-client": "^4.5.4",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.5.0",
     "uuid": "^8.3.2"
