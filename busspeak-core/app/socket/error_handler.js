@@ -4,7 +4,7 @@ module.exports = (socket) => {
     })
 
     socket.io.on('reconnect', (attempt) => {
-        console.log('Connection to socket server re-established')
+        console.log('Connection to socket server re-established on attempt #' + attempt)
     })
 
     socket.on('req_error', (data) => {
