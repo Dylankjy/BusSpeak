@@ -5,7 +5,7 @@ const config = {
     DEBUG_MODE: process.env.DEBUG_MODE || (inspector.url() !== undefined) ? true : false,
 
     // BusSpeak Core
-    BUS_STOP_CODE: process.env.BUS_STOP_CODE || 55509,
+    BUS_STOP_CODE: parseInt(process.env.BUS_STOP_CODE) || 00000,
 
     // Webserver
     HOSTNAME: process.env.HOSTNAME || 'localhost',
