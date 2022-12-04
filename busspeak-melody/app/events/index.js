@@ -6,6 +6,6 @@ module.exports = (io) => {
         })
 
         // Events
-        require('./melody')(socket)
+        require('./melody')(io, socket)
     })
 }
