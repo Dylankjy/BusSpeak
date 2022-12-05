@@ -4,7 +4,8 @@ const env = require('../config')
 const socket = io(env.socketClient.ENDPOINT, {
     reconnectionDelayMax: env.socketClient.OPTIONS.reconnectionDelayMax,
     reconnection: env.socketClient.OPTIONS.reconnection,
-    reconnectionAttempts: env.socketClient.OPTIONS.reconnectionAttempts
+    reconnectionAttempts: env.socketClient.OPTIONS.reconnectionAttempts,
+    cors: {origin: "*"}
 })
 
 socket.on('connect', () => {

@@ -1,6 +1,7 @@
 module.exports = (socket) => {
-    socket.io.on('error', () => {
-        console.log('Error connecting to socket server')
+    socket.io.on('error', (err) => {
+        console.log('Error connecting to socket server ' + err.error)
+        console.log(socket.id)
     })
 
     socket.io.on('reconnect', (attempt) => {
