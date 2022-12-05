@@ -6,7 +6,7 @@ const socket = io(env.socketClient.ENDPOINT, {
     reconnection: env.socketClient.OPTIONS.reconnection,
     reconnectionAttempts: env.socketClient.OPTIONS.reconnectionAttempts,
     cors: {
-        origin: "*"
+        origin: '*'
     }
 })
 

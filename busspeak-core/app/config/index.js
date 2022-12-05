@@ -30,7 +30,7 @@ const config = {
     },
 
     socketClient: {
-        ENDPOINT: process.env.SOCKET_ENDPOINT || 'http://127.0.0.1:5010', 
+        ENDPOINT: process.env.SOCKET_ENDPOINT || 'http://127.0.0.1:5010',
         OPTIONS: {
             reconnectionDelayMax: 5000,
             reconnection: true,
