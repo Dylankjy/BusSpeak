@@ -1,0 +1,12 @@
+service: chatbot
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  # region: ap-southeast-1
+  # stage: dev
+
+functions:
+  getFirstLastStop:
+    handler: handler.getFirstLastStop
