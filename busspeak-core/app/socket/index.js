@@ -5,7 +5,9 @@ const socket = io(env.socketClient.ENDPOINT, {
     reconnectionDelayMax: env.socketClient.OPTIONS.reconnectionDelayMax,
     reconnection: env.socketClient.OPTIONS.reconnection,
     reconnectionAttempts: env.socketClient.OPTIONS.reconnectionAttempts,
-    cors: {origin: "*"}
+    cors: {
+        origin: "*"
+    }
 })
 
 socket.on('connect', () => {
