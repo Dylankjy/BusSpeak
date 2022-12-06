@@ -4,6 +4,7 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
+    "aws-sdk": "^2.1268.0",
     "node-fetch": "^2.6.7"
   }
 }
