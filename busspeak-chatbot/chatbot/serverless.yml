@@ -10,3 +10,5 @@ provider:
 functions:
   getFirstLastStop:
     handler: handler.getFirstLastStop
+  getNextBusTime:
+    handler: handler.getNextBusTime

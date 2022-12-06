@@ -4,6 +4,7 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
+    "moment": "^2.29.4",
     "node-fetch": "^2.6.7"
   }
 }
