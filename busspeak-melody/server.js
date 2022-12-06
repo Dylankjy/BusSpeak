@@ -10,16 +10,15 @@ require('./app/events')(io)
 const cors = require('cors')
 const path = require('path')
 app.use(cors({
-    origin: 'http://localhost:5010'
+    origin: 'http://localhost' + env.PORT
 }))
 
 app.get('/', (req, res) => {
     return res.json({ status: 200, service_name: 'BusSpeak Melody Websocket Service', owner: 'BusSpeak' })
 })
 
-app.get('/test', (req, res) => {
-    return res.sendFile(path.join(__dirname, 'test.html'))
-})
+// Public folder
+app.use('/debug', express.static(path.join(__dirname, 'debug')))
 
 app.all('*', (req, res) => {
     return res.redirect('/')
