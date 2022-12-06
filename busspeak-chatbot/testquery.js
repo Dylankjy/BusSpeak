@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const moment = require('moment')
 
 // TD: use param store for API keys
 const apiKey = '8vHBg7b/SrC78oWoKaWWSQ=='
@@ -6,8 +7,8 @@ const apiKey = '8vHBg7b/SrC78oWoKaWWSQ=='
 // TD: caching
 
 // simple test func - this bus service goes from where to where *using desc*
-const foo = async (serviceNo) => {
-    console.log('here')
+const getStartEndInterchange = async (serviceNo) => {
+    console.log('here1')
 
     // GET BUS STOP CODES
     let queryIndex = 0
@@ -68,4 +69,24 @@ const foo = async (serviceNo) => {
     console.log('OUT dest is ' + destinationName)
 }
 
-foo('853')
+// when is the next bus arriving
+const getNextBusTime = async (stopCode, serviceNo) => {
+    console.log('here2')
+
+    const response = await fetch(`http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=${stopCode}&${serviceNo}`, {
+        method: 'GET',
+        headers: { 'AccountKey': `${apiKey}`, 'Content-Type': 'application/json' }
+    })
+
+    const data = await response.json()
+    console.log(data)
+    if (data.Services.length > 0) {
+        const nextArrivalRaw = data.Services[0].NextBus.EstimatedArrival
+        const nextArrival = nextArrivalRaw.substring(nextArrivalRaw.indexOf('T') + 1, nextArrivalRaw.indexOf('+'))
+        const diff = moment(nextArrival, 'h:mm:ss').fromNow()
+        console.log(diff)
+    }
+}
+
+// getStartEndInterchange('853')
+getNextBusTime(83139, 15)

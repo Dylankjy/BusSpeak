@@ -1,5 +1,6 @@
 'use strict'
 const fetch = require('node-fetch')
+const moment = require('moment')
 
 // TD: use param store for API keys
 const apiKey = '8vHBg7b/SrC78oWoKaWWSQ=='
@@ -64,6 +65,43 @@ module.exports.getFirstLastStop = async (event, context, callback) => {
         }
 
         const answer = `The bus service ${serviceNo} goes between Bus Stop ${originName} (${originCode}) and Bus Stop ${destinationName} (${destinationCode}).`
+
+        return {
+            'sessionAttributes': {},
+            'dialogAction': {
+                'type': 'Close',
+                'fulfillmentState': 'Fulfilled',
+                'message': {
+                    'contentType': 'PlainText',
+                    'content': answer
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports.getNextBusTime = async (event, context, callback) => {
+    const serviceNo = event.currentIntent.slots['ServiceNo']
+    const stopCode = event.currentIntent.slots['StopCode']
+    let answer = ''
+
+    try {
+        const response = await fetch(`http://datamall2.mytransport.sg/ltaodataservice/BusArrivalv2?BusStopCode=${stopCode}&${serviceNo}`, {
+            method: 'GET',
+            headers: { 'AccountKey': `${apiKey}`, 'Content-Type': 'application/json' }
+        })
+
+        const data = await response.json()
+        if (data.Services.length > 0) {
+            const nextArrivalRaw = data.Services[0].NextBus.EstimatedArrival
+            const nextArrival = nextArrivalRaw.substring(nextArrivalRaw.indexOf('T') + 1, nextArrivalRaw.indexOf('+'))
+            const diff = moment(nextArrival, 'h:mm:ss').fromNow()
+            answer = `The next bus ${serviceNo} arrives in ${diff}.`
+        } else {
+            answer = 'This bus is not active currently.'
+        }
 
         return {
             'sessionAttributes': {},
