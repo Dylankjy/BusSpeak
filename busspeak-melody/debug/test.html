@@ -11,10 +11,10 @@
     <script src="./jquery.min.js"></script>
 
     <script>
-    var socket = io('http://127.0.0.1:5010');
+    var socket = io('http://10.1.0.5:5010');
 
-    const sendCommand = (stopID) => {
-        socket.emit('user_play_melody', {stopID: stopID});
+    sendCommand = (stopID) => {
+        socket.emit('user_play_melody', {stopID: parseInt(stopID)});
     }
     </script>
 </head>
