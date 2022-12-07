@@ -1,53 +1,39 @@
-//NEED CREDENTIALS FILE
-
-// Load the AWS SDK for Node.js
 const AWS = require('aws-sdk');
-// Set the region 
-AWS.config.update({region: 'us-east-1'});
+AWS.config.update({region: 'ap-southeast-1'});
 
 // Create SQS service object
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 // Replace with your accountid and the queue name you setup
-const accountId = '473107870026';
-const queueName = 'ecp-sqs-queue';
-const queueUrl = `https://sqs.us-east-1.amazonaws.com/${accountId}/${queueName}`;
+const queueUrl = `https://sqs.ap-southeast-1.amazonaws.com/358578802142/ecp-sqs-queue`
 
 // Setup the receiveMessage parameters
 const params = {
   QueueUrl: queueUrl,
-  MaxNumberOfMessages: 1,
-  VisibilityTimeout: 0,
+  MaxNumberOfMessages: 10,
+  VisibilityTimeout: 30,
   WaitTimeSeconds: 0
 };
 
-sqs.receiveMessage(params, (err, data) => {
+sqs.receiveMessage(params, function(err, data) {
   if (err) {
-    console.log(err, err.stack);
-  } else {
-    if (!data.Message) {
-      console.log('Nothing to process');
-      return;
+    console.log("Receive Error", err);
+  } else if (data.Messages) {
+
+    for (let i = 0; i < data.Messages.length; i++) {
+      console.log(data.Messages[i].MessageId)
     }
 
-    const orderData = JSON.parse(data.Messages[0].Body);
-    console.log('Order received', orderData);
-
-    // orderData is now an object that contains order_id and date properties
-    // Lookup order data from data storage
-    // Execute billing for order
-    // Update data storage
-
-    // Now we must delete the message so we don't handle it again
-    const deleteParams = {
+    var deleteParams = {
       QueueUrl: queueUrl,
       ReceiptHandle: data.Messages[0].ReceiptHandle
     };
-    sqs.deleteMessage(deleteParams, (err, data) => {
+    console.log("Message Await Deletion", data.Messages[0]);
+    sqs.deleteMessage(deleteParams, function(err, data) {
       if (err) {
-        console.log(err, err.stack);
+        console.log("Delete Error", err);
       } else {
-        console.log('Successfully deleted message from queue');
+        console.log("Message Deleted", data);
       }
     });
   }
