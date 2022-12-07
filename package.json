@@ -4,7 +4,9 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1268.0",
+    "aws-sdk": "^2.1269.0",
+    "bulma": "^0.9.4",
+    "moment": "^2.29.4",
     "node-fetch": "^2.6.7"
   }
 }
