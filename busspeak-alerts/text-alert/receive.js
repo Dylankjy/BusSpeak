@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+AWS.config.loadFromPath('./config.json');
 AWS.config.update({region: 'ap-southeast-1'});
 
 // Create SQS service object
@@ -28,7 +29,9 @@ sqs.receiveMessage(params, function(err, data) {
       QueueUrl: queueUrl,
       ReceiptHandle: data.Messages[0].ReceiptHandle
     };
-    console.log("Message Await Deletion", data.Messages[0]);
+    //console.log("Message Await Deletion", data.Messages[0]);
+    var obj = JSON.parse(data.Messages[0].Body);
+    console.log("Message Await Deletion", obj.arrival_msg);
     sqs.deleteMessage(deleteParams, function(err, data) {
       if (err) {
         console.log("Delete Error", err);
@@ -37,4 +40,6 @@ sqs.receiveMessage(params, function(err, data) {
       }
     });
   }
+
+  return obj.arrival_msg;
 });

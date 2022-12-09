@@ -29,6 +29,7 @@
 // Load the AWS SDK for Node.js
 const AWS = require('aws-sdk');
 // Set the region we will be using
+AWS.config.loadFromPath('./config.json');
 AWS.config.update({region: 'ap-southeast-1'});
 
 // Create SQS service client
@@ -41,7 +42,7 @@ const queueName = 'ecp-sqs-queue';
 // Setup the sendMessage parameter object
 const params = {
   MessageBody: JSON.stringify({
-    order_id: 1234,
+    arrival_msg: "Your bus" + " has arrived",
     date: (new Date()).toISOString()
   }),
   QueueUrl: `https://sqs.ap-southeast-1.amazonaws.com/${accountId}/${queueName}`
