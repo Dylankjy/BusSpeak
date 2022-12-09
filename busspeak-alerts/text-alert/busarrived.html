@@ -22,7 +22,7 @@
           <br>
           <p class="subtitle">
               <div>
-                  <button class="button is-link is-rounded">Head Back</button>
+                  <button onclick="directFinish()" class="button is-link is-rounded">Head Back</button>
               </div>
           </p>
           </div>
@@ -33,7 +33,9 @@
     </div>
   </section>
   </body>
-  <script>
-    
+  <script type="text/javascript">
+    function directFinish() {
+      window.location.href = "http://localhost:3000/";
+    }
   </script>
 </html>
