@@ -1,3 +1,6 @@
+// on Lambda side
+
+//SendMessage
 var AWS = require('aws-sdk');
 var sqs = new AWS.SQS();
 
@@ -25,31 +28,34 @@ exports.handler = async (event) => {
     return response;
 };
 
-// // Load the AWS SDK for Node.js
-// const AWS = require('aws-sdk');
-// // Set the region we will be using
-// AWS.config.update({region: 'us-east-1'});
+//ReceiveMessage
+var AWS = require('aws-sdk');
+var sqs = new AWS.SQS();
+var queueURL = "https://sqs.ap-southeast-1.amazonaws.com/358578802142/ecp-sqs-queue";
 
-// // Create SQS service client
-// const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
-// // Replace with your accountid and the queue name you setup
-// const accountId = '358578802142';
-// const queueName = 'ecp-sqs-queue';
+// For Standard Queue
+exports.handler = async (event) => {
+    
+    var params = {
+         AttributeNames: [
+            "SentTimestamp"
+         ],
+         MaxNumberOfMessages: 10,
+         MessageAttributeNames: [
+            "All"
+         ],
+         QueueUrl: queueURL,
+         VisibilityTimeout: 20,
+         WaitTimeSeconds: 0
+    };
+    
+    let queueRes = await sqs.receiveMessage(params).promise();
+    const response = {
+        statusCode: 200,
+        body: queueRes,
+    };
+    
+    return response;
+};
 
-// // Setup the sendMessage parameter object
-// const params = {
-//   MessageBody: JSON.stringify({
-//     order_id: 1234,
-//     date: (new Date()).toISOString()
-//   }),
-//   QueueUrl: `https://sqs.us-east-1.amazonaws.com/${accountId}/${queueName}`
-// };
-
-// sqs.sendMessage(params, (err, data) => {
-//   if (err) {
-//     console.log("Error", err);
-//   } else {
-//     console.log("Successfully added message", data.MessageId);
-//   }
-// });

@@ -6,7 +6,7 @@ AWS.config.update({region: 'ap-southeast-1'});
 const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 // Replace with your accountid and the queue name you setup
-const queueUrl = `https://sqs.ap-southeast-1.amazonaws.com/358578802142/ecp-sqs-queue`
+const queueUrl = `https://sqs.ap-southeast-1.amazonaws.com/868750684322/Bus-SQSQueue`
 
 // Setup the receiveMessage parameters
 const params = {
@@ -21,9 +21,9 @@ sqs.receiveMessage(params, function(err, data) {
     console.log("Receive Error", err);
   } else if (data.Messages) {
 
-    for (let i = 0; i < data.Messages.length; i++) {
-      console.log(data.Messages[i].MessageId)
-    }
+    // for (let i = 0; i < data.Messages.length; i++) {
+    //   console.log(data.Messages[i].MessageId)
+    // }
 
     var deleteParams = {
       QueueUrl: queueUrl,
@@ -31,7 +31,7 @@ sqs.receiveMessage(params, function(err, data) {
     };
     //console.log("Message Await Deletion", data.Messages[0]);
     var obj = JSON.parse(data.Messages[0].Body);
-    console.log("Message Await Deletion", obj.arrival_msg);
+    console.log("Message Await Deletion", "message shown:" + obj.arrival_msg);
     sqs.deleteMessage(deleteParams, function(err, data) {
       if (err) {
         console.log("Delete Error", err);
@@ -41,5 +41,5 @@ sqs.receiveMessage(params, function(err, data) {
     });
   }
 
-  return obj.arrival_msg;
+  //return obj.arrival_msg;
 });

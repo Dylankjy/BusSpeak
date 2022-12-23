@@ -18,7 +18,8 @@
   "dependencies": {
     "aws-sdk": "^2.1269.0",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "node-rekognition": "^0.4.0"
   },
   "description": ""
 }
