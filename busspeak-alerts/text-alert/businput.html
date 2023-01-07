@@ -1,11 +1,10 @@
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>Welcome to BusSpeak!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <script src="./index.js"></script>
+    <!-- <script type="module" src="./index.js"></script> -->
   </head>
   <body>
   <section class="section">
@@ -23,11 +22,22 @@
           <p class="subtitle">
               <div>
                   <p>Input your bus number</p> 
-                  <input class="input is-info" type="text" placeholder="000">
+                  <!-- <input class="input is-info" id="text" type="text" placeholder="000">
                   <br><br>
                   <button id="myButton" onclick="directFinish()" class="button is-link is-rounded">
                     Submit
+                  </button> -->
+
+                  <!-- <input type="text" name="user[name]">
+                  <input type="text" name="user[email]">
+                  <input type="submit" value="Submit"> -->
+
+                <form method="post" action="/IncomingBusResponse">
+                  <input class="input is-info" id="text" type="text" name="bus" placeholder="000">
+                  <br><br>
+                  <input id="myButton" onclick="directFinish()" type="submit" value="Submit" class="button is-link is-rounded">
                   </button>
+                </form>
               </div>
           </p>
           </div>
@@ -39,7 +49,7 @@
   </section>
   </body>
   <script type="text/javascript">
-    function directFinish() {
+    function directFinish() {      
       window.location.href = "http://localhost:3000/IncomingBusResponse";
     }
   </script>
