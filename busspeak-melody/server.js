@@ -10,7 +10,7 @@ require('./app/events')(io)
 const cors = require('cors')
 const path = require('path')
 app.use(cors({
-    origin: 'http://10.1.0.5' + env.PORT
+    origin: env.CORS_ORIGIN
 }))
 
 app.get('/', (req, res) => {

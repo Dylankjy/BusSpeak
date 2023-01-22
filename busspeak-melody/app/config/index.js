@@ -6,7 +6,8 @@ const config = {
 
     // Webserver
     HOSTNAME: process.env.HOSTNAME || 'localhost',
-    PORT: process.env.PORT || 5000
+    PORT: process.env.PORT || 5000,
+    CORS_ORIGIN: process.env.CORS_ORIGIN || 'http://localhost:3000'
 
     // API Constants
     // constants: {
