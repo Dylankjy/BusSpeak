@@ -29,6 +29,19 @@
             "runtimeExecutable": "nodemon",
             "args": ["--inspect"],
             "envFile": "${workspaceFolder}\\busspeak-melody\\.env"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug BusSpeak Minerva",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "restart": true,
+            "program": "${workspaceFolder}\\busspeak-minerva\\minerva\\debug.js",
+            "runtimeExecutable": "nodemon",
+            "args": ["--inspect"],
+            "envFile": "${workspaceFolder}\\busspeak-minerva\\minerva\\.env"
         }
     ]
 }
