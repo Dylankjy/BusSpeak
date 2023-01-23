@@ -30,6 +30,7 @@ const getAll = async (endpoint) => {
 
     return new Promise(async (resolve) => {
         while (true) {
+            console.log(`Fetching ${endpoint} with skip ${skip}`)
             const res = await datamall.get(`${endpoint}?$skip=${skip}`)
             completeList.push(...res.data.value)
 
