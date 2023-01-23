@@ -131,3 +131,8 @@ dist
 
 # macOS Finder Indexes
 .DS_STORE
+busspeak-minerva/layer/nodejs.zip
+busspeak-minerva/layer/nodejs/package-lock.json
+busspeak-minerva/layer/nodejs/package.json
+busspeak-minerva/minerva/getdata.js
+busspeak-minerva/minerva/minerva.zip
