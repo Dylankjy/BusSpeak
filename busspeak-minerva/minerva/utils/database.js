@@ -34,7 +34,7 @@ const clearDb = async () => {
     await BusService.deleteMany({})
 }
 
-const populateDb = async (busStops, busRoutes, busServices) => {
+const populateDb = (busStops, busRoutes, busServices) => {
     // Populate BusStop
     for (const busStop of busStops) {
         console.log(`${busStop.BusStopCode}`)
@@ -49,7 +49,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             }
         })
 
-        await newBusStop.save()
+        newBusStop.save()
     }
 
     // Populate BusRoute
@@ -81,7 +81,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             }
         })
 
-        await newBusRoute.save()
+        newBusRoute.save()
     }
 
     // Populate BusService
@@ -110,7 +110,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             }
         })
 
-        await newBusService.save()
+        newBusService.save()
     }
 }
 
