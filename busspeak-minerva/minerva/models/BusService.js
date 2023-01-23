@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const BusService = new mongoose.Schema({
     _id: { type: String },
-    serviceNumber: { type: Number, required: true },
+    service: { type: String, required: true },
     operator: { type: String, required: true },
     category: { type: String, required: true },
     route: {

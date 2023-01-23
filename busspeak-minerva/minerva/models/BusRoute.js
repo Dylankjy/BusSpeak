@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 
 const BusRoute = new mongoose.Schema({
     _id: { type: String },
-    serviceNumber: { type: Number, required: true, ref: 'services' },
+    service: { type: String, required: true, ref: 'services' },
     direction: { type: String, required: true },
 
     stopInfo: {
-        busStopCode: { type: Number, ref: 'busstops', required: true },
+        busStop: { type: Number, ref: 'stops', required: true },
         stopSequence: { type: Number, required: true },
         distance: { type: Number, required: true },
 
