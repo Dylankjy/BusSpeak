@@ -25,7 +25,7 @@ const BusService = new mongoose.Schema({
     timestamps: { createdAt: 'currentAsAt', updatedAt: false, _id: false }
 })
 
-BusService.index({ serviceNumber: 1 })
+BusService.index({ service: 1 })
 BusService.index({ stopName: 'text' })
 
 module.exports = mongoose.model('services', BusService)

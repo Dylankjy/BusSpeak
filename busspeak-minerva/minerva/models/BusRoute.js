@@ -29,7 +29,7 @@ const BusRoute = new mongoose.Schema({
     timestamps: { createdAt: 'currentAsAt', updatedAt: false, _id: false }
 })
 
-BusRoute.index({ serviceNumber: 1 })
-BusRoute.index({ 'stopInfo.busStopCode': 1 })
+BusRoute.index({ service: 1 })
+BusRoute.index({ 'stopInfo.busStop': 1 })
 
 module.exports = mongoose.model('routes', BusRoute)
