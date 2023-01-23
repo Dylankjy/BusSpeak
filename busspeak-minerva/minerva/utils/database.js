@@ -34,11 +34,16 @@ const clearDb = async () => {
     await BusService.deleteMany({})
 }
 
-const populateDb = (busStops, busRoutes, busServices) => {
+const populateDb = async (busStops, busRoutes, busServices) => {
+    const busStopObjects = []
+    const busRouteObjects = []
+    const busServiceObjects = []
+
     // Populate BusStop
     for (const busStop of busStops) {
         console.log(`${busStop.BusStopCode}`)
-        const newBusStop = new BusStop({
+
+        busStopObjects.push({
             _id: parseInt(busStop.BusStopCode),
             code: parseInt(busStop.BusStopCode),
             stopName: busStop.Description,
@@ -48,14 +53,12 @@ const populateDb = (busStops, busRoutes, busServices) => {
                 longitude: busStop.Longitude
             }
         })
-
-        newBusStop.save()
     }
 
     // Populate BusRoute
     for (const busRoute of busRoutes) {
         console.log(`${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}-${busRoute.StopSequence}`)
-        const newBusRoute = new BusRoute({
+        busRouteObjects.push({
             _id: `${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}-${busRoute.StopSequence}`,
             service: `${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}`,
             operator: busRoute.Operator,
@@ -80,14 +83,12 @@ const populateDb = (busStops, busRoutes, busServices) => {
                 }
             }
         })
-
-        newBusRoute.save()
     }
 
     // Populate BusService
     for (const busService of busServices) {
         console.log(`${busService.ServiceNo}-${(busService.Direction === 1) ? 'DOWN' : 'UP'}`)
-        const newBusService = new BusService({
+        busServiceObjects.push({
             _id: `${busService.ServiceNo}-${(busService.Direction === 1) ? 'DOWN' : 'UP'}`,
             service: busService.ServiceNo,
             operator: busService.Operator,
@@ -109,9 +110,12 @@ const populateDb = (busStops, busRoutes, busServices) => {
                 }
             }
         })
-
-        newBusService.save()
     }
+
+    // Insert into database
+    await BusStop.insertMany(busStopObjects)
+    await BusRoute.insertMany(busRouteObjects)
+    await BusService.insertMany(busServiceObjects)
 }
 
 module.exports = {
