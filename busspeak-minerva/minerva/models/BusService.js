@@ -7,8 +7,8 @@ const BusService = new mongoose.Schema({
     category: { type: String, required: true },
     route: {
         direction: { type: String, required: true },
-        originCode: { type: Number, ref: 'stops' },
-        destinationCode: { type: Number, ref: 'stops' }
+        originStop: { type: Number, ref: 'stops' },
+        destinationStop: { type: Number, ref: 'stops' }
     },
     loopDesc: { type: String },
     frequency: {

@@ -94,8 +94,8 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             category: busService.Category,
             route: {
                 direction: (busService.Direction === 1) ? 'DOWN' : 'UP',
-                originCode: busService.OriginCode,
-                destinationCode: busService.DestinationCode
+                originStop: busService.OriginCode,
+                destinationStop: busService.DestinationCode
             },
             loopDesc: (busService.LoopDesc !== '') ? busService.LoopDesc : null,
             frequency: {
