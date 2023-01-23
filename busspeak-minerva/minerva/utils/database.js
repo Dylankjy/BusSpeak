@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
+const path = require('path')
+
 const connectDb = () => {
     return new Promise((resolve) => {
         mongoose.connect(process.env.MONGODB_URI, {
@@ -9,14 +11,9 @@ const connectDb = () => {
             ssl: (process.env.MONGODB_USE_SSL === 'true') ? true : false,
             sslValidate: true,
             sslCA: (process.env.MONGODB_USE_SSL) ? path.join(__dirname, process.env.MONGODB_SSL_CA) : undefined
-        }).then((connection) => {
+        }).then(() => {
             console.log('Database connection successful.')
-            // List all collections
-            connection.db.listCollections().toArray((err, collections) => {
-                console.table(collections)
-            })
-
-            return resolve(connection)
+            return resolve()
         }).catch((err) => {
             throw err
         })
@@ -27,9 +24,9 @@ const disconnectDb = () => {
     mongoose.disconnect()
 }
 
-const BusStop = require('./models/BusStop')
-const BusRoute = require('./models/BusRoute')
-const BusService = require('./models/BusService')
+const BusStop = require('../models/BusStop')
+const BusRoute = require('../models/BusRoute')
+const BusService = require('../models/BusService')
 
 const clearDb = async () => {
     await BusStop.deleteMany({})
@@ -60,11 +57,11 @@ const populateDb = async (busStops, busRoutes, busServices) => {
         console.log(`${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}-${busRoute.StopSequence}`)
         const newBusRoute = new BusRoute({
             _id: `${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}-${busRoute.StopSequence}`,
-            serviceNumber: parseInt(busRoute.ServiceNo),
+            service: `${busRoute.ServiceNo}-${(busRoute.Direction === 1) ? 'DOWN' : 'UP'}`,
             operator: busRoute.Operator,
             direction: (busRoute.Direction === 1) ? 'DOWN' : 'UP',
             stopInfo: {
-                busStopCode: parseInt(busRoute.BusStopCode),
+                busStop: parseInt(busRoute.BusStopCode),
                 stopSequence: parseInt(busRoute.StopSequence),
                 distance: parseInt(busRoute.Distance),
                 timings: {
@@ -92,7 +89,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
         console.log(`${busService.ServiceNo}-${(busService.Direction === 1) ? 'DOWN' : 'UP'}`)
         const newBusService = new BusService({
             _id: `${busService.ServiceNo}-${(busService.Direction === 1) ? 'DOWN' : 'UP'}`,
-            serviceNumber: parseInt(busService.ServiceNo),
+            service: busService.ServiceNo,
             operator: busService.Operator,
             category: busService.Category,
             route: {
