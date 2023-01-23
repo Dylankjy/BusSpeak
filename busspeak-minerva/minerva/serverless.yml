@@ -1,0 +1,12 @@
+service: minerva
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  # region: ap-southeast-1
+  # stage: dev
+
+functions:
+  refreshDatabase:
+    handler: handler.refreshDatabase

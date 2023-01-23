@@ -1,64 +1,35 @@
-// Get environment variables
-const dotenv = require('dotenv')
-dotenv.config()
-
-// axios
-const axios = require('axios')
-const datamall = axios.create({
-    baseURL: 'http://datamall2.mytransport.sg/ltaodataservice',
-    headers: {
-        'AccountKey': process.env.LTA_DATAMALL_KEY,
-        'accept': 'application/json'
-    }
-})
-
-// Mongoose
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
-    console.log('Database connection successful.')
-}).catch((err) => {
-    console.error('Error connecting to MongoDB', err)
-})
 
-// Models
+const connectDb = () => {
+    return new Promise((resolve) => {
+        mongoose.connect(process.env.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            ssl: (process.env.MONGODB_USE_SSL === 'true') ? true : false,
+            sslValidate: true,
+            sslCA: (process.env.MONGODB_USE_SSL) ? path.join(__dirname, process.env.MONGODB_SSL_CA) : undefined
+        }).then((connection) => {
+            console.log('Database connection successful.')
+            // List all collections
+            connection.db.listCollections().toArray((err, collections) => {
+                console.table(collections)
+            })
+
+            return resolve(connection)
+        }).catch((err) => {
+            throw err
+        })
+    })
+}
+
+const disconnectDb = () => {
+    mongoose.disconnect()
+}
+
 const BusStop = require('./models/BusStop')
 const BusRoute = require('./models/BusRoute')
 const BusService = require('./models/BusService')
-
-module.exports.populate_database = async (event, context, callback) => {
-    const busStops = await getAll('/BusStops')
-    const busRoutes = await getAll('/BusRoutes')
-    const busServices = await getAll('/BusServices')
-
-    clearDb().then(() => {
-        populateDb(busStops, busRoutes, busServices).then(() => {
-            mongoose.disconnect()
-        })
-    })
-
-    return true
-}
-
-const getAll = async (endpoint) => {
-    const completeList = []
-    let skip = 0
-
-    return new Promise(async (resolve) => {
-        while (true) {
-            const res = await datamall.get(`${endpoint}?$skip=${skip}`)
-            completeList.push(...res.data.value)
-
-            if (res.data.value.length === 0) {
-                break
-            }
-
-            skip += 500
-        }
-
-        return resolve(completeList)
-    })
-}
 
 const clearDb = async () => {
     await BusStop.deleteMany({})
@@ -144,4 +115,13 @@ const populateDb = async (busStops, busRoutes, busServices) => {
 
         await newBusService.save()
     }
+}
+
+module.exports = {
+    connection: {
+        open: connectDb,
+        close: disconnectDb
+    },
+    clearDb,
+    populateDb
 }
