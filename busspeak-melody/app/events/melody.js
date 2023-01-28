@@ -39,6 +39,12 @@ module.exports = (io, socket) => {
 
         // TODO: Client rate limiting
 
-        return socket.to(data.stopID).emit('busstop_play_melody', {})
+        console.log(`User at Bus Stop ${data.stopID} has requested to play melody`)
+
+        // Send command to busstop
+        socket.to(data.stopID).emit('busstop_play_melody', {})
+
+        // Acknowledge command
+        return socket.emit('user_play_melody_ack', { status: 200, description: 'Play melody command sent to Busspeak Core ID ' + data.stopID })
     })
 }
