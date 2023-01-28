@@ -2,33 +2,25 @@ const { io } = require('socket.io-client')
 
 const socket = io(process.env.BUSSPEAK_CORE_SOCKET_ENDPOINT)
 
-const sendCommand = () => {
+const sendCommand = (stopID) => {
     socket.emit('user_play_melody', { stopID: parseInt(stopID) })
-}
-
-const acknowledge = () => {
-    return new Promise((resolve) => {
-        socket.on('user_play_melody_ack', (data) => {
-            return resolve()
-        })
-    })
 }
 
 module.exports.handler = (event, context, callback) => {
     const { stopID } = event
     console.log('stopID: ' + stopID)
 
-    sendCommand()
+    sendCommand(stopID)
 
-    acknowledge().then(() => {
+    return socket.on('user_play_melody_ack', (data) => {
         // Disconnect
-        socket.disconnect()
+        socket.close()
 
         const response = {
             statusCode: 200,
             description: 'Melody command sent successfully.'
         }
-        // callback(null, response)
+        callback(null, response)
         return response
     })
 }
