@@ -8,7 +8,10 @@ module.exports = (io, socket) => {
             socket.leaveAll()
 
             // Join room with corresponding Bus Stop ID
-            return socket.join(data.stopID)
+            socket.join(data.stopID)
+
+            // Acknowledge connection
+            return socket.emit('busstop_connect_ack', { status: 200, description: 'Connection successful. Joined room ' + data.stopID })
         }
 
         socket.emit('req_error', { code: 'INVALID_STOPID', description: 'stopID provided is invalid.' })
