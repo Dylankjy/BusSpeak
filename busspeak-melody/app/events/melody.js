@@ -25,17 +25,15 @@ module.exports = (io, socket) => {
         }
         */
 
-        console.log(`User at Bus Stop ${data.stopID} has requested to play melody`)
-
         // Check whether stop ID is integer
         if (!Number.isInteger(data.stopID)) {
-            console.log('a')
+            console.debug('Received an invalid stopID from client.')
             return socket.emit('req_error', { code: 'INVALID_STOPID_CLIENT', description: 'stopID provided in the command is invalid.' })
         }
 
         // Check whether busstop is in the room
         if (!io.sockets.adapter.rooms.has(data.stopID)) {
-            console.log('b')
+            console.debug('Received a request to ring in an non-existent room. Check whether BusSpeak Core exists at the stopID.')
             return socket.emit('req_error', { code: 'REQUESTED_BUSCORE_NOT_FOUND', description: 'The BusSpeak Core that you are attempting to contact does not exist. stopID may be invalid.' })
         }
 
