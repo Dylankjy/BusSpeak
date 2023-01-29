@@ -17,34 +17,41 @@ module.exports = (io, socket) => {
         return socket.emit('req_error', { code: 'INVALID_STOPID', description: 'stopID provided is invalid.' })
     })
 
-    socket.on('user_play_melody', (data) => {
-        /*
-        data = {
-            stopID: 1234
-            // No need to include client id as it you can just read the default room id
-        }
-        */
+    // DEPRECATION NOTICE: This event is deprecated. Use the REST API instead.
 
-        // Check whether stop ID is integer
-        if (!Number.isInteger(data.stopID)) {
-            console.debug('Received an invalid stopID from client.')
-            return socket.emit('req_error', { code: 'INVALID_STOPID_CLIENT', description: 'stopID provided in the command is invalid.' })
-        }
+    // socket.on('user_play_melody', (data) => {
+    //     /*
+    //     data = {
+    //         stopID: 1234
+    //         // No need to include client id as it you can just read the default room id
+    //     }
+    //     */
 
-        // Check whether busstop is in the room
-        if (!io.sockets.adapter.rooms.has(data.stopID)) {
-            console.debug('Received a request to ring in an non-existent room. Check whether BusSpeak Core exists at the stopID.')
-            return socket.emit('req_error', { code: 'REQUESTED_BUSCORE_NOT_FOUND', description: 'The BusSpeak Core that you are attempting to contact does not exist. stopID may be invalid.' })
-        }
+    //     // Check whether stop ID is integer
+    //     if (!Number.isInteger(data.stopID)) {
+    //         console.debug('Received an invalid stopID from client.')
+    //         return socket.emit('req_error', { code: 'INVALID_STOPID_CLIENT', description: 'stopID provided in the command is invalid.' })
+    //     }
 
-        // TODO: Client rate limiting
+    //     // Check whether busstop is in the room
+    //     if (!io.sockets.adapter.rooms.has(data.stopID)) {
+    //         console.debug('Received a request to ring in an non-existent room. Check whether BusSpeak Core exists at the stopID.')
+    //         return socket.emit('req_error', { code: 'REQUESTED_BUSCORE_NOT_FOUND', description: 'The BusSpeak Core that you are attempting to contact does not exist. stopID may be invalid.' })
+    //     }
 
-        console.log(`User at Bus Stop ${data.stopID} has requested to play melody`)
+    //     // TODO: Client rate limiting
 
-        // Send command to busstop
-        socket.to(data.stopID).emit('busstop_play_melody', {})
+    //     console.log(`User at Bus Stop ${data.stopID} has requested to play melody`)
 
-        // Acknowledge command
-        return socket.emit('user_play_melody_ack', { status: 200, description: 'Play melody command sent to Busspeak Core ID ' + data.stopID })
-    })
+    //     // Send command to busstop
+    //     socket.to(data.stopID).emit('busstop_play_melody', {})
+
+    //     // Acknowledge command
+    //     socket.emit('user_play_melody_ack', { status: 200, description: 'Play melody command sent to Busspeak Core ID ' + data.stopID })
+
+    //     // Disconnect the client
+    //     return setTimeout(() => {
+    //         socket.disconnect()
+    //     }, 1000)
+    // })
 }
