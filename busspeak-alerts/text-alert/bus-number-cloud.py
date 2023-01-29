@@ -20,7 +20,7 @@ def get_custom_labels(model, bucket, photo):
     # Call DetectCustomLabels
     response = client.detect_custom_labels(
         Image={'S3Object': {'Bucket': bucket, 'Name': photo}}, ProjectVersionArn=model)
-    print(response)
+    #print(response)
     for customLabel in response['CustomLabels']:
         if 'Geometry' in customLabel:
             box = customLabel['Geometry']['BoundingBox']
@@ -38,8 +38,8 @@ def get_custom_label_word(bucket, photo, h, w):
     updateh = h - 0.01
     updatew = w - 0.01
 
-    print("detect: "+repr(updateh))
-    print("detect: "+repr(updatew))
+    #print("detect: "+repr(updateh))
+    #print("detect: "+repr(updatew))
 
     image = {'S3Object': {
         'Bucket': bucket,
@@ -54,7 +54,7 @@ def get_custom_label_word(bucket, photo, h, w):
     }
 
     response = client.detect_text(Image=image, Filters=boxFilter)
-    print(response)
+    # print(response)
     for customLabel in response['TextDetections']:
         if 'DetectedText' in customLabel:
             print(customLabel['DetectedText'])
