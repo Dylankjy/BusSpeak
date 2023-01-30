@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 // Import bulma
 import 'bulma/css/bulma.min.css';
 
+// Import App.css
+import './App.css';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

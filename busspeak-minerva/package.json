@@ -9,6 +9,7 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
+    "aws-sdk": "^2.1304.0",
     "axios": "^1.2.3",
     "dotenv": "^16.0.3",
     "mongodb": "^4.13.0",

@@ -1,5 +1,7 @@
-const GotoPageButton = ({ faIcon, text, desc }) => (
-    <a className="box">
+import { Link } from "react-router-dom"
+
+const GotoPageButton = ({ faIcon, text, desc, link }) => (
+    <Link className="box" to={link}>
         <div className="level">
             <div className="level-left">
                 <div className="level-item">
@@ -16,7 +18,7 @@ const GotoPageButton = ({ faIcon, text, desc }) => (
                 </div>
             </div>
         </div>
-    </a>
+    </Link>
 )
 
 export default GotoPageButton

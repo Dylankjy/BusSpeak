@@ -4,6 +4,7 @@ const BusStop = new mongoose.Schema({
     _id: { type: String },
     code: { type: Number, required: true, unique: true },
     stopName: { type: String, required: true },
+    stopNameLower: { type: String, required: true, lowercase: true },
     location: {
         road: { type: String, required: true },
         latitude: { type: Number, required: true },

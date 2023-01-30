@@ -47,6 +47,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             _id: parseInt(busStop.BusStopCode),
             code: parseInt(busStop.BusStopCode),
             stopName: busStop.Description,
+            stopNameLower: (busStop.Description).toLowerCase(),
             location: {
                 road: busStop.RoadName,
                 latitude: busStop.Latitude,
