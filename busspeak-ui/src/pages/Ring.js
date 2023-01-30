@@ -57,17 +57,19 @@ const Ring = () => {
                 method: "post",
                 url: "https://gfegn6mkia.execute-api.ap-southeast-1.amazonaws.com/geo/nearby_busstops",
                 data: {
-                    location: {
-                        "lat": 1.3966562187311518,
-                        "long": 103.74432968189477
-                    }
+                    location: userLocation
                 },
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "*/*",
                 }
             })
-            setNearbyStops(res.data.result)
+            // nearbyStops.length = 0
+
+            // Remove duplicates
+            const uniqueStops = [...new Map(res.data.result.map(item => [item['code'], item])).values()]
+
+            setNearbyStops(uniqueStops)
             return res.data
         }
 
@@ -75,6 +77,7 @@ const Ring = () => {
             console.debug("Location info was updated")
             console.table(userLocation)
             
+            // Fetch nearby stops
             getBusStopList()
         }
     }, [userLocation])
@@ -109,7 +112,7 @@ const Ring = () => {
                         <b>Bus stops nearby</b>
                         <ul>
                             {nearbyStops.map((stop) => {
-                                return <li key={stop._id}>{stop.stopName} ({stop.code})</li>
+                                return <li key={stop.code}>{stop.stopName} ({stop.code})</li>
                             })}
                         </ul>
                     </div>
