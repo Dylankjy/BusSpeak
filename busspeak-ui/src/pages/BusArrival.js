@@ -5,24 +5,22 @@ import Hero from "../components/Global/Hero"
 const BusArrival = () => {
     const [formSuccess, setFormSuccess] = useState(null) //on the way
     const [busNumber, setbusNumber] = useState("");//input
+    const busMsg = busNumber + ' is on the way!'
     const [busComes, setArrivalSuccess] = useState(null)//arrived
+    const showMessage = localStorage.getItem('showMessage');
 
     const handleSubmit = async (e)=>{      
         e.preventDefault();
         console.log(busNumber);
 
-        if(busNumber) {  //if input number
+        if(busNumber==='983') {//replace 983 with Modeldata busNo in the future
             //Using SQS Queue in Singapore region, not Tokyo atm       
             sendMessage(busNumber)
-            setFormSuccess(true)
-          } else {
             setFormSuccess(false)
-          }
-
-        if(busNumber==='983') { //replace 983 with Modeldata busNo in the future
             receiveMessage()   
             setArrivalSuccess(true)
           } else {
+            setFormSuccess(true)
             setArrivalSuccess(false)
           }
     }
@@ -86,7 +84,7 @@ const BusArrival = () => {
             };
     
             var obj = JSON.parse(data.Messages[0].Body);
-            console.log(JSON.stringify(obj));
+            let msg = (obj['arrival_msg']).toString();
     
             sqs.deleteMessage(deleteParams, function(err, data) {
                 if (err) {
@@ -95,7 +93,8 @@ const BusArrival = () => {
                 console.log("Message Deleted", data);         
                 }
             });
-            return (JSON.stringify(obj) + ' has arrived!');
+            localStorage.setItem('showMessage', msg);
+            //return (JSON.stringify(obj) + ' has arrived!');
             }
         });
     }
@@ -137,8 +136,8 @@ const BusArrival = () => {
                         </form>
                     </div>
                     <br></br>
-                    {formSuccess && <label className="label">{busNumber}</label>}
-                    {busComes && <label className="label">{busNumber + ' has arrived!'}</label>}
+                    {formSuccess && <label className="label">{busMsg}</label>}
+                    {busComes && <label className="label">{showMessage}</label>}
                 </div>
             </section>
         </>
