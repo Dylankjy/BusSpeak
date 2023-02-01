@@ -13,16 +13,36 @@ const BusArrival = () => {
         e.preventDefault();
         console.log(busNumber);
 
-        if(busNumber==='983') {//replace 983 with Modeldata busNo in the future
+        if(busNumber==='962') {//replace 983 with Modeldata busNo in the future
             //Using SQS Queue in Singapore region, not Tokyo atm       
-            sendMessage(busNumber)
-            setFormSuccess(false)
-            receiveMessage()   
+            retrieveRekognitionData(busNumber)
+            setFormSuccess(false)   
             setArrivalSuccess(true)
           } else {
             setFormSuccess(true)
             setArrivalSuccess(false)
           }
+    }
+
+    function retrieveRekognitionData(busNumber) {
+        //remember to activate the model
+        const AWS = require('aws-sdk');
+        AWS.config.update({ "accessKeyId": "AKIA4URMTOCRMV4F6A4X", 
+        "secretAccessKey": "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", 
+        "region": "ap-southeast-1" });
+        var lambda = new AWS.Lambda();
+        var params = {
+          FunctionName: 'Bus-Number-cloud', /* required */
+          Payload: null
+        };
+        lambda.invoke(params, function(err, data) {
+          if (err) 
+            console.log(err, err.stack); // an error occurred
+          else
+            sendMessage(busNumber)
+            receiveMessage()
+            console.log(data);           // successful response
+        });
     }
 
     function sendMessage(busNumber) {
