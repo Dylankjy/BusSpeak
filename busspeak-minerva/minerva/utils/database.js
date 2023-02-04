@@ -50,7 +50,7 @@ const populateDb = async (busStops, busRoutes, busServices) => {
             stopNameLower: (busStop.Description).toLowerCase(),
             location: {
                 road: busStop.RoadName,
-                coordinates: [busStop.Latitude, busStop.Longitude]
+                coordinates: [busStop.Longitude, busStop.Latitude]
             }
         })
     }
