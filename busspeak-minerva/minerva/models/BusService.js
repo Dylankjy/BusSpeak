@@ -26,6 +26,5 @@ const BusService = new mongoose.Schema({
 })
 
 BusService.index({ service: 1 })
-BusService.index({ stopName: 'text' })
 
 module.exports = mongoose.model('services', BusService)

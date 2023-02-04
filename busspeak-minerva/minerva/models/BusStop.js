@@ -7,8 +7,8 @@ const BusStop = new mongoose.Schema({
     stopNameLower: { type: String, required: true, lowercase: true },
     location: {
         road: { type: String, required: true },
-        latitude: { type: Number, required: true },
-        longitude: { type: Number, required: true }
+        type: { type: String, required: true, default: 'Point' },
+        coordinates: [{ type: Number, required: true }]
     }
 }, {
     timestamps: { createdAt: 'currentAsAt', updatedAt: false, _id: false }
@@ -16,5 +16,6 @@ const BusStop = new mongoose.Schema({
 
 BusStop.index({ code: 1 }, { unique: true })
 BusStop.index({ stopName: 'text' })
+BusStop.index({ location: '2dsphere' })
 
 module.exports = mongoose.model('stops', BusStop)
