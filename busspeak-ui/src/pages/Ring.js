@@ -6,15 +6,18 @@ import LocationPrompt from "../components/Ring/LocationPrompt"
 import axios from "axios"
 
 import { useFormik } from 'formik';
+import LocatingLoading from "../components/Ring/Locating"
 
 const Ring = () => {
     const [userLocation, setUserLocation] = useState({
         lat: null,
         long: null
     })
+    const [lastLocationUpdate, setLastLocationUpdate] = useState(null)
 
     const [showLocatonPrompt, setShowLocationPrompt] = useState(false)
     const [nearbyStops, setNearbyStops] = useState([])
+    const [nearbyLocation, setNearbyLocations] = useState(null)
 
     useEffect(() => {
         let locationWatch = null
@@ -39,6 +42,7 @@ const Ring = () => {
                     lat: position.coords.latitude,
                     long: position.coords.longitude
                 })
+                setLastLocationUpdate((new Date()).toISOString())
             })
 
         } else {
@@ -52,6 +56,7 @@ const Ring = () => {
 
     // Whenever location updates, fetch nearby stops from Google Maps API
     useEffect(() => {
+        console.log('Location was updated')
         const getBusStopList = async () => {
             const res = await axios({
                 method: "post",
@@ -64,19 +69,19 @@ const Ring = () => {
                     "Accept": "*/*",
                 }
             })
-            // nearbyStops.length = 0
 
             // Remove duplicates
             const uniqueStops = [...new Map(res.data.result.map(item => [item['code'], item])).values()]
 
             setNearbyStops(uniqueStops)
+            setNearbyLocations(res.data.nearbyLocation)
             return res.data
         }
 
         if (userLocation.lat !== null && userLocation.long !== null) {
             console.debug("Location info was updated")
             console.table(userLocation)
-            
+
             // Fetch nearby stops
             getBusStopList()
         }
@@ -97,27 +102,34 @@ const Ring = () => {
 
     return (
         <>
-            <Hero title="Ring for me" subtitle="Play a jingle to know that you're at the right stop" size="" returnHomeBtn={true} />
+            <Hero title="Ring for me" subtitle="Play a jingle to know that you're at the right stop" size="" returnHomeBtn={true} extraElement={<LocationNotif location={userLocation} lastUpdate={lastLocationUpdate} />} />
+            {(nearbyStops.length === 0) && <LocatingLoading />}
+
+            { (nearbyStops.length !== 0) &&
             <section className="section">
                 <div className="container">
-                    <LocationNotif location={userLocation} />
+                    <h1 className="title">You are currently near {nearbyLocation}</h1>
+                    <p className="subtitle">Showing bus stops within a 500m radius</p>
 
-                    <div>
-                        <b>Current coords</b>
-                        <p>{userLocation.lat}</p>
-                        <p>{userLocation.long}</p>
+                    <p className="mb-5 is-size-5"><i className="fa-solid fa-bell"></i>&ensp;Click on the Bus Stop you wish to play a jingle at.</p>
+
+                    <div className="columns is-multiline">
+                        {nearbyStops.map((stop) => {
+                            return (
+                                <div className="column is-4" key={stop._id}>
+                                    <div className="box">
+                                        <p className="is-size-5 has-text-weight-bold">
+                                            {stop.stopName}
+                                        </p>
+                                        <p className="subtitle">{stop._id}</p>
+                                        <p className="has-text-grey"><i className="fa-solid fa-road"></i>&ensp;{stop.location.road}</p>
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
 
-                    <div>
-                        <b>Bus stops nearby</b>
-                        <ul>
-                            {nearbyStops.map((stop) => {
-                                return <li key={stop.code}>{stop.stopName} ({stop.code})</li>
-                            })}
-                        </ul>
-                    </div>
-
-                    <div>
+                    {/* <div>
                         <form onSubmit={formik.handleSubmit}>
                             <label htmlFor="stopID">Enter stop ID</label>
                             <input
@@ -129,9 +141,12 @@ const Ring = () => {
                             />
                             <button type="submit">Submit</button>
                         </form>
-                    </div>
+                    </div> */}
                 </div>
             </section>
+            }
+
+
             {showLocatonPrompt && <LocationPrompt onClose={() => { setShowLocationPrompt(false) }} />}
         </>
     )

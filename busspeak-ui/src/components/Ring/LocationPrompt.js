@@ -14,8 +14,8 @@ const LocationPrompt = ({ onClose }) => {
                         <p>If you decline and change your mind in the future, you will need to do so in your browser settings.</p>
 
                         <div className="buttons mt-5 is-right">
-                            <Link to="/" className="button is-white">Return to home</Link>
-                            <button to="/" className="button is-dark" onClick={onClose}>Close</button>
+                            {/* <Link to="/" className="button is-white">Return to home</Link> */}
+                            <Link to="/" className="button is-dark" onClick={onClose}>Cancel &amp; return home</Link>
                         </div>
                     </div>
                 </div>
