@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Hero from "../components/Global/Hero"
-// const spawn = require("child_process");
+
+//INCLUDE POLLING TO KEEP RETRIEVING THE NEW UPDATE ON BUS ARRIVAL
 
 const BusArrival = () => {
     const [formSuccess, setFormSuccess] = useState(null) //on the way
@@ -18,10 +19,46 @@ const BusArrival = () => {
             retrieveRekognitionData(busNumber)
             setFormSuccess(false)   
             setArrivalSuccess(true)
+            speakText(busNumber)
           } else {
             setFormSuccess(true)
             setArrivalSuccess(false)
           }
+    }
+
+    function speakText(busNumber) {
+        const AWS = require('aws-sdk');
+        // Initialize the Amazon Cognito credentials provider
+        AWS.config.region = 'ap-southeast-1'; // Region
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-southeast-1:0d816bc7-634c-407c-a955-da089686de28',
+            //IdentityId: 'busspeakIdentityPool'
+        });
+
+        // Create the JSON parameters for getSynthesizeSpeechUrl
+        var speechParams = {
+            OutputFormat: "mp3",
+            SampleRate: "16000",
+            Text: "Bus "+ busNumber +" has arrived! Bus "+ busNumber +" has arrived! Bus "+ busNumber +" has arrived!",
+            TextType: "text",
+            VoiceId: "Joanna"
+        };
+        //speechParams.Text = document.getElementById("textEntry").value;
+
+        // Create the Polly service object and presigner object
+        var polly = new AWS.Polly({apiVersion: '2016-06-10'});
+        var signer = new AWS.Polly.Presigner(speechParams, polly)
+
+        // Create presigned URL of synthesized speech file
+        signer.getSynthesizeSpeechUrl(speechParams, function(error, url) {
+        if (error) {
+            document.getElementById('result').innerHTML = error;
+        } else {
+            document.getElementById('audioSource').src = url;
+            document.getElementById('audioPlayback').load();
+            document.getElementById('audioPlayback').play();
+        }
+      });
     }
 
     function retrieveRekognitionData(busNumber) {
@@ -114,29 +151,9 @@ const BusArrival = () => {
                 }
             });
             localStorage.setItem('showMessage', msg);
-            //return (JSON.stringify(obj) + ' has arrived!');
             }
         });
     }
-
-    // function getModelData(busNumber) {
-    //     var dataToSend;
-    //     const python = spawn('python', ['bus-number-cloud.py']);
-
-    //     python.stdout.on('data', async function (data) {
-    //     dataToSend = data.toString();
-    //     console.log(dataToSend);
-
-    //     if (dataToSend.includes(busNumber)) {
-    //     sendMessage(busNumber)
-    //     receiveMessage();
-    //     }
-        
-    //     });
-    //     python.on('close', (code) => {
-    //     console.log(`child process close all stdio with code ${code}`);
-    //     });
-    // }
 
     return (
         <>
@@ -155,6 +172,10 @@ const BusArrival = () => {
                             <button type="submit">Submit</button>
                         </form>
                     </div>
+                    <br></br>
+                    <audio id="audioPlayback" autoplay crossorigin="anonymous">
+                        <source id="audioSource" src=""></source>
+                    </audio>
                     <br></br>
                     {formSuccess && <label className="label">{busMsg}</label>}
                     {busComes && <label className="label">{showMessage}</label>}
