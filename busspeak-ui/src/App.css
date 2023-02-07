@@ -8,6 +8,78 @@
     font-weight: bold
 }
 
+.tag.is-bus-number {
+    background-color: #55dd33;
+    color: #000000;
+    font-weight: bold;
+}
+
+.is-blurred {
+    filter: blur(8px) grayscale(50%) opacity(0.5);
+    pointer-events: none;
+    user-select: none;
+}
+
+.modal-content {
+    animation: modal 0.3s ease;
+}
+
+.modal-background {
+    animation: modal-background 0.3s ease;
+}
+
+@keyframes modal {
+    0% {
+        opacity: 0;
+        transform: translateY(2rem);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes modal-background {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.card-content-busstop-info {
+    transition: filter 0.6s ease;
+}
+
+.card-content-centered {
+    position: absolute;
+    /* Center in div */
+    left: 0;
+    top: 35%;
+    width: 100%;
+    display: none;
+
+    /* transition: opacity 0.6s ease; */
+}
+
+.card-content .loader {
+    position: relative;
+    display: inline-block;
+    transform: translateX(-50%);
+    border: 4px solid #363636;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    width: 2rem;
+    height: 2rem;
+}
+
+.card-content-centered.is-active {
+    display: block
+}
+
+
+
 .has-animation-float {
     animation: float 1s ease-in-out infinite;
 }

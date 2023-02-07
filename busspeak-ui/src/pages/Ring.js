@@ -7,6 +7,7 @@ import axios from "axios"
 
 import { useFormik } from 'formik';
 import LocatingLoading from "../components/Ring/Locating"
+import StopInfoModal from "../components/Ring/partials/StopInfoModal"
 
 const Ring = () => {
     const [userLocation, setUserLocation] = useState({
@@ -87,18 +88,36 @@ const Ring = () => {
         }
     }, [userLocation])
 
-    const formInitialValues = {
-        stopID: '15159'
-    }
-    const formik = useFormik({
-        initialValues: formInitialValues,
-        onSubmit: (values, { resetForm }) => {
-            const res = axios.post('https://gfegn6mkia.execute-api.ap-southeast-1.amazonaws.com/melody/play', { stopID: parseInt(formik.values.stopID) })
-            console.log(res.data)
-            resetForm()
-        },
-    });
+    const [stopInfoModalData, setStopInfoModalData] = useState({})
+    const [showStopInfoModal, setShowStopInfoModal] = useState(false)
 
+    const getStopInfo = async (stopID) => {
+        const res = await axios({
+            method: "post",
+            url: "https://gfegn6mkia.execute-api.ap-southeast-1.amazonaws.com/geo/get_stop",
+            data: {
+                stopID: stopID
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+            }
+        })
+
+        return res.data
+    }
+
+    const toggleStopInfoModal = async (stopID) => {
+        setShowStopInfoModal(true)
+        getStopInfo(stopID).then((stopInfo) => {
+            setStopInfoModalData(stopInfo)
+        })
+    }
+
+    const onStopInfoModalClose = () => {
+        setShowStopInfoModal(false)
+        setStopInfoModalData({})
+    }
 
     return (
         <>
@@ -117,36 +136,23 @@ const Ring = () => {
                         {nearbyStops.map((stop) => {
                             return (
                                 <div className="column is-4" key={stop._id}>
-                                    <div className="box">
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a className="box" onClick={() => toggleStopInfoModal(stop._id)}>
                                         <p className="is-size-5 has-text-weight-bold">
                                             {stop.stopName}
                                         </p>
                                         <p className="subtitle">{stop._id}</p>
                                         <p className="has-text-grey"><i className="fa-solid fa-road"></i>&ensp;{stop.location.road}</p>
-                                    </div>
+                                    </a>
                                 </div>
                             )
                         })}
                     </div>
-
-                    {/* <div>
-                        <form onSubmit={formik.handleSubmit}>
-                            <label htmlFor="stopID">Enter stop ID</label>
-                            <input
-                                id="stopID"
-                                name="stopID"
-                                type="text"
-                                onChange={formik.handleChange}
-                                value={formik.values.stopID}
-                            />
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div> */}
                 </div>
             </section>
             }
 
-
+            {showStopInfoModal && <StopInfoModal data={stopInfoModalData} onClose={onStopInfoModalClose} />}
             {showLocatonPrompt && <LocationPrompt onClose={() => { setShowLocationPrompt(false) }} />}
         </>
     )
