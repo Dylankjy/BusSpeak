@@ -1,21 +1,20 @@
 import { useState } from "react"
 import Hero from "../components/Global/Hero"
 //import { playRaspPi } from "../pages/BusArrivalAlert"
-
+import {Reload} from '@rsuite/icons';
 //INCLUDE POLLING TO KEEP RETRIEVING THE NEW UPDATE ON BUS ARRIVAL
 
 const BusArrival = () => {
     const [formSuccess, setFormSuccess] = useState(null) //on the way
     const [busNumber, setbusNumber] = useState("");//input
-    const busMsg = busNumber + ' is on the way!'
+    const busMsg = "On the way..."
     const [busComes, setArrivalSuccess] = useState(null)//arrived
     const showMessage = localStorage.getItem('showMessage');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(busNumber);
-
-        setTimeout(runPolling, 2000);
+        setTimeout(runPolling, 5000);
 
         // POLLING WORKS
         function runPolling() {
@@ -28,7 +27,7 @@ const BusArrival = () => {
             } else {
                 setFormSuccess(true)
                 setArrivalSuccess(false)
-                setTimeout(runPolling, 2000);
+                setTimeout(runPolling, 5000);
             }
         }
 
@@ -66,40 +65,40 @@ const BusArrival = () => {
         //     });
         // }
     }
-    function playRaspPi(busNumber) {
-        var Stream = require('stream');
-        var Speaker = require('speaker');
-        const AWS = require('aws-sdk');
+    // function playRaspPi(busNumber) {
+    //     var Stream = require('stream');
+    //     var Speaker = require('speaker');
+    //     const AWS = require('aws-sdk');
 
-        function getPlayer() {
-            return new Speaker({
-                channels: 1,
-                bitDepth: 16,
-                sampleRate: 16000
-            });
-        }
+    //     function getPlayer() {
+    //         return new Speaker({
+    //             channels: 1,
+    //             bitDepth: 16,
+    //             sampleRate: 16000
+    //         });
+    //     }
 
-        var speechParams2 = {
-            OutputFormat: "pcm",
-            SampleRate: "16000",
-            Text: "Bus " + busNumber + " has arrived!",
-            TextType: "text",
-            VoiceId: "Joanna"
-        }
-        var Polly = new AWS.Polly({ apiVersion: '2016-06-10' });
-        //var speak = function(text) {
-        //speechParams2.Text = text;
-        Polly.synthesizeSpeech(speechParams2, function (err, res) {
-            if (err) {
-                console.log('err', err)
-            } else if (res && res.AudioStream instanceof Buffer) {
-                var bufferStream = new Stream.PassThrough()
-                bufferStream.end(res.AudioStream)
-                bufferStream.pipe(getPlayer());
-            }
-        })
-        //}
-    }
+    //     var speechParams2 = {
+    //         OutputFormat: "pcm",
+    //         SampleRate: "16000",
+    //         Text: "Bus " + busNumber + " has arrived!",
+    //         TextType: "text",
+    //         VoiceId: "Joanna"
+    //     }
+    //     var Polly = new AWS.Polly({ apiVersion: '2016-06-10' });
+    //     //var speak = function(text) {
+    //     //speechParams2.Text = text;
+    //     Polly.synthesizeSpeech(speechParams2, function (err, res) {
+    //         if (err) {
+    //             console.log('err', err)
+    //         } else if (res && res.AudioStream instanceof Buffer) {
+    //             var bufferStream = new Stream.PassThrough()
+    //             bufferStream.end(res.AudioStream)
+    //             bufferStream.pipe(getPlayer());
+    //         }
+    //     })
+    //     //}
+    // }
 
     function speakText(busNumber) {
         //var Speaker = require('speaker');
@@ -135,7 +134,7 @@ const BusArrival = () => {
                 document.getElementById('audioSource').src = url;
                 document.getElementById('audioPlayback').load();
                 document.getElementById('audioPlayback').play();
-                playRaspPi(busNumber);
+                //playRaspPi(busNumber);
             }
         });
     }
@@ -240,6 +239,41 @@ const BusArrival = () => {
         });
     }
 
+    const emojiStyles = {
+        marginLeft: 3.2 + 2 + 'rem',
+        fontSize: Math.random() > 0.5 ? '75px' : '75px',
+        padding: '20px',
+        backgroundColor: 'white',
+        color: 'white',
+      };
+      const bStyles = {
+        marginLeft: 3 + 3.5 + 'rem',
+        fontSize: Math.random() > 0.5 ? '25px' : '25px',
+      };
+      const bStyles2 = {
+        marginLeft: 1 + 2 + 'rem',
+      };
+      const bStyles3 = {
+        marginLeft: 1 + 1 + 'rem',
+        marginTop: 1 + 1 + 'rem',
+        marginRight: 0.1 + 0.1 + 'rem',
+        backgroundColor: 'white',
+        borderRadius: 15,
+        fontSize: '15px'
+      };
+      const bStyles4 = {
+        borderRadius: 5,
+        border: 'none',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        outline: 'none',
+        fontSize: '17px'
+      };
+      const bStyles5 = {
+        marginLeft: 3 + 2.5 + 'rem',
+        fontSize: '23px'
+      };
+
     return (
         <>
             <Hero title="Wait for bus" subtitle="Know when your bus arrives effortlessly" size="" returnHomeBtn={true} />
@@ -247,23 +281,28 @@ const BusArrival = () => {
                 <div className="container">
 
                     <div>
-                        <span role="img" aria-label="smileyface">😊</span><b> Hi User! Please input your bus number.</b>
+                        <span role="img" style={emojiStyles} stylearia-label="smileyface">😊</span><br></br><b style={bStyles}>Hi User!</b><br></br><p style={bStyles2}>Please input your bus number.</p>
                     </div>
 
                     <div>
                         <form onSubmit={handleSubmit}>
-                            <label htmlFor="stopID">Enter Bus number </label>
-                            <input type="text" name='busName' onChange={e => setbusNumber(e.target.value)}></input>
-                            <button type="submit">Submit</button>
+                            <label htmlFor="stopID"></label>
+                            <input style={bStyles3} type="text" name='busName' onChange={e => setbusNumber(e.target.value)}></input>
+                            <button style={bStyles4} type="submit">Submit</button>
                         </form>
                     </div>
                     <br></br>
                     <audio id="audioPlayback" autoplay crossorigin="anonymous">
                         <source id="audioSource" src=""></source>
                     </audio>
-                    <br></br>
-                    {formSuccess && <label className="label">{busMsg}</label>}
-                    {busComes && <label className="label">{showMessage}</label>}
+                    <Reload spin 
+                    style={{ marginLeft: 6 + 2.5 + 'rem', fontSize: '2em' }} 
+                    color="black" />
+                    <div>
+                        <span role="img" style={emojiStyles} stylearia-label="smileyface">🚌</span>
+                    </div>
+                    {formSuccess && <label style={bStyles5} className="label">{busMsg}</label>}
+                    {busComes && <label style={bStyles5} className="label">{showMessage}</label>}
                 </div>
             </section>
         </>
