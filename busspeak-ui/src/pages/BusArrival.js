@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Hero from "../components/Global/Hero"
+//import { playRaspPi } from "../pages/BusArrivalAlert"
 
 //INCLUDE POLLING TO KEEP RETRIEVING THE NEW UPDATE ON BUS ARRIVAL
 
@@ -10,24 +11,101 @@ const BusArrival = () => {
     const [busComes, setArrivalSuccess] = useState(null)//arrived
     const showMessage = localStorage.getItem('showMessage');
 
-    const handleSubmit = async (e)=>{      
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(busNumber);
 
-        if(busNumber==='962') {//replace 983 with Modeldata busNo in the future
-            //Using SQS Queue in Singapore region, not Tokyo atm       
-            retrieveRekognitionData(busNumber)
-            setFormSuccess(false)   
-            setArrivalSuccess(true)
-            speakText(busNumber)
-          } else {
-            setFormSuccess(true)
-            setArrivalSuccess(false)
-          }
+        setTimeout(runPolling, 2000);
+
+        // POLLING WORKS
+        function runPolling() {
+            if (busNumber === '962') {//replace 983 with Modeldata busNo in the future
+                //Using SQS Queue in Singapore region, not Tokyo atm       
+                retrieveRekognitionData(busNumber)
+                setFormSuccess(false)
+                setArrivalSuccess(true)
+                speakText(busNumber)
+            } else {
+                setFormSuccess(true)
+                setArrivalSuccess(false)
+                setTimeout(runPolling, 2000);
+            }
+        }
+
+        // REMOVE COMMENT TAGS TO TEST WITH DEEPLENS
+        // function runPolling() {
+        //     //remember to activate the model
+        //     const AWS = require('aws-sdk');
+        //     AWS.config.update({
+        //         "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
+        //         "secretAccessKey": "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",
+        //         "region": "ap-northeast-1"
+        //     });
+        //     var lambda = new AWS.Lambda();
+        //     var params = {
+        //         FunctionName: 'Bus-Number-cloud', /* required */
+        //         Payload: null
+        //     };
+        //     lambda.invoke(params, function (err, data) {
+        //         if (err)
+        //             console.log(err, err.stack); // an error occurred
+        //         else
+        //             if (busNumber === data) {
+        //                 setFormSuccess(false)
+        //                 setArrivalSuccess(true)
+        //                 speakText(busNumber)
+        //                 sendMessage(busNumber)
+        //                 receiveMessage()
+        //                 console.log(data);           // successful response
+        //             }
+        //             else {
+        //                 setFormSuccess(true)
+        //                 setArrivalSuccess(false)
+        //                 setTimeout(runPolling, 2000);
+        //             }
+        //     });
+        // }
+    }
+    function playRaspPi(busNumber) {
+        var Stream = require('stream');
+        var Speaker = require('speaker');
+        const AWS = require('aws-sdk');
+
+        function getPlayer() {
+            return new Speaker({
+                channels: 1,
+                bitDepth: 16,
+                sampleRate: 16000
+            });
+        }
+
+        var speechParams2 = {
+            OutputFormat: "pcm",
+            SampleRate: "16000",
+            Text: "Bus " + busNumber + " has arrived!",
+            TextType: "text",
+            VoiceId: "Joanna"
+        }
+        var Polly = new AWS.Polly({ apiVersion: '2016-06-10' });
+        //var speak = function(text) {
+        //speechParams2.Text = text;
+        Polly.synthesizeSpeech(speechParams2, function (err, res) {
+            if (err) {
+                console.log('err', err)
+            } else if (res && res.AudioStream instanceof Buffer) {
+                var bufferStream = new Stream.PassThrough()
+                bufferStream.end(res.AudioStream)
+                bufferStream.pipe(getPlayer());
+            }
+        })
+        //}
     }
 
     function speakText(busNumber) {
+        //var Speaker = require('speaker');
         const AWS = require('aws-sdk');
+        //const Stream = require('stream');
+
         // Initialize the Amazon Cognito credentials provider
         AWS.config.region = 'ap-southeast-1'; // Region
         AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -39,44 +117,47 @@ const BusArrival = () => {
         var speechParams = {
             OutputFormat: "mp3",
             SampleRate: "16000",
-            Text: "Bus "+ busNumber +" has arrived! Bus "+ busNumber +" has arrived! Bus "+ busNumber +" has arrived!",
+            Text: "Bus " + busNumber + " has arrived!",
             TextType: "text",
             VoiceId: "Joanna"
         };
         //speechParams.Text = document.getElementById("textEntry").value;
 
         // Create the Polly service object and presigner object
-        var polly = new AWS.Polly({apiVersion: '2016-06-10'});
+        var polly = new AWS.Polly({ apiVersion: '2016-06-10' });
         var signer = new AWS.Polly.Presigner(speechParams, polly)
 
         // Create presigned URL of synthesized speech file
-        signer.getSynthesizeSpeechUrl(speechParams, function(error, url) {
-        if (error) {
-            document.getElementById('result').innerHTML = error;
-        } else {
-            document.getElementById('audioSource').src = url;
-            document.getElementById('audioPlayback').load();
-            document.getElementById('audioPlayback').play();
-        }
-      });
+        signer.getSynthesizeSpeechUrl(speechParams, function (error, url) {
+            if (error) {
+                document.getElementById('result').innerHTML = error;
+            } else {
+                document.getElementById('audioSource').src = url;
+                document.getElementById('audioPlayback').load();
+                document.getElementById('audioPlayback').play();
+                playRaspPi(busNumber);
+            }
+        });
     }
 
     function retrieveRekognitionData(busNumber) {
         //remember to activate the model
         const AWS = require('aws-sdk');
-        AWS.config.update({ "accessKeyId": "AKIA4URMTOCRMV4F6A4X", 
-        "secretAccessKey": "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", 
-        "region": "ap-southeast-1" });
+        AWS.config.update({
+            "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
+            "secretAccessKey": "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",
+            "region": "ap-southeast-1"
+        });
         var lambda = new AWS.Lambda();
         var params = {
-          FunctionName: 'Bus-Number-cloud', /* required */
-          Payload: null
+            FunctionName: 'Bus-Number-cloud', /* required */
+            Payload: null
         };
-        lambda.invoke(params, function(err, data) {
-          if (err) 
-            console.log(err, err.stack); // an error occurred
-          else
-            sendMessage(busNumber)
+        lambda.invoke(params, function (err, data) {
+            if (err)
+                console.log(err, err.stack); // an error occurred
+            else
+                sendMessage(busNumber)
             receiveMessage()
             console.log(data);           // successful response
         });
@@ -85,42 +166,46 @@ const BusArrival = () => {
     function sendMessage(busNumber) {
         const AWS = require('aws-sdk');
         //AWS.config.loadFromPath('./config.json');
-        AWS.config.update({ "accessKeyId": "AKIA4URMTOCRMV4F6A4X", 
-        "secretAccessKey": "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", 
-        "region": "ap-southeast-1" });
-        AWS.config.update({region: 'ap-southeast-1'});
+        AWS.config.update({
+            "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
+            "secretAccessKey": "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",
+            "region": "ap-southeast-1"
+        });
+        AWS.config.update({ region: 'ap-southeast-1' });
 
-        const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+        const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
         const accountId = '868750684322';
         const queueName = 'Bus-SQSQueue';
 
         const params = {
             MessageBody: JSON.stringify({
-            arrival_msg: busNumber + " has arrived!",
-            date: (new Date()).toISOString()
+                arrival_msg: busNumber + " has arrived!",
+                date: (new Date()).toISOString()
             }),
             QueueUrl: `https://sqs.ap-southeast-1.amazonaws.com/${accountId}/${queueName}`
         };
 
         sqs.sendMessage(params, (err, data) => {
             if (err) {
-            console.log("Error", err);
+                console.log("Error", err);
             } else {
                 console.log("Successfully added message", data.MessageId);
             }
         });
         return (busNumber);
     }
-    
+
     function receiveMessage() {
         const AWS = require('aws-sdk');
         //AWS.config.loadFromPath('./config.json');
-        AWS.config.update({ "accessKeyId": "AKIA4URMTOCRMV4F6A4X", 
-        "secretAccessKey": "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", 
-        "region": "ap-southeast-1" });
-        AWS.config.update({region: 'ap-southeast-1'});
+        AWS.config.update({
+            "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
+            "secretAccessKey": "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",
+            "region": "ap-southeast-1"
+        });
+        AWS.config.update({ region: 'ap-southeast-1' });
 
-        const sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+        const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
         const queueUrl = `https://sqs.ap-southeast-1.amazonaws.com/868750684322/Bus-SQSQueue`
 
         const params = {
@@ -129,28 +214,28 @@ const BusArrival = () => {
             VisibilityTimeout: 30,
             WaitTimeSeconds: 0
         };
-        
-        sqs.receiveMessage(params, function(err, data) {
+
+        sqs.receiveMessage(params, function (err, data) {
             if (err) {
-            console.log("Receive Error", err);
+                console.log("Receive Error", err);
             } else if (data.Messages) {
-        
-            var deleteParams = {
-                QueueUrl: queueUrl,
-                ReceiptHandle: data.Messages[0].ReceiptHandle
-            };
-    
-            var obj = JSON.parse(data.Messages[0].Body);
-            let msg = (obj['arrival_msg']).toString();
-    
-            sqs.deleteMessage(deleteParams, function(err, data) {
-                if (err) {
-                console.log("Delete Error", err);
-                } else {
-                console.log("Message Deleted", data);         
-                }
-            });
-            localStorage.setItem('showMessage', msg);
+
+                var deleteParams = {
+                    QueueUrl: queueUrl,
+                    ReceiptHandle: data.Messages[0].ReceiptHandle
+                };
+
+                var obj = JSON.parse(data.Messages[0].Body);
+                let msg = (obj['arrival_msg']).toString();
+
+                sqs.deleteMessage(deleteParams, function (err, data) {
+                    if (err) {
+                        console.log("Delete Error", err);
+                    } else {
+                        console.log("Message Deleted", data);
+                    }
+                });
+                localStorage.setItem('showMessage', msg);
             }
         });
     }
@@ -162,7 +247,7 @@ const BusArrival = () => {
                 <div className="container">
 
                     <div>
-                    <span role="img" aria-label="smileyface">😊</span><b> Hi User! Please input your bus number.</b>
+                        <span role="img" aria-label="smileyface">😊</span><b> Hi User! Please input your bus number.</b>
                     </div>
 
                     <div>

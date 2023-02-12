@@ -35,15 +35,15 @@ app.post('/IncomingBusResponse', async (req, res) => {
   python.stdout.on('data', async function (data) {
     dataToSend = data.toString();
     console.log(req.body.bus);  
-    console.log(S3CustomLabelText());
+    //console.log(S3CustomLabelText());
     console.log(dataToSend);
-    if (S3CustomLabels()) {
+    if (dataToSend.includes(businput)) {
       // if (req.body.bus == S3CustomLabelText()) {
-      if (dataToSend.includes(businput)) {
+      //if (dataToSend.includes(businput)) {
         await activateSQS(req.body.bus);
         await receiveSQS(express, app);
         res.sendFile(__dirname + "/busarrived.html");
-      }
+      //}
     } 
   });
   // in close event we are sure that stream from child process is closed
