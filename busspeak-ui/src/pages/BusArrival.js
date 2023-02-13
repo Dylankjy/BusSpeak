@@ -17,53 +17,53 @@ const BusArrival = () => {
         setTimeout(runPolling, 5000);
 
         // POLLING WORKS
-        function runPolling() {
-            if (busNumber === '962') {//replace 983 with Modeldata busNo in the future
-                //Using SQS Queue in Singapore region, not Tokyo atm       
-                retrieveRekognitionData(busNumber)
-                setFormSuccess(false)
-                setArrivalSuccess(true)
-                speakText(busNumber)
-            } else {
-                setFormSuccess(true)
-                setArrivalSuccess(false)
-                setTimeout(runPolling, 5000);
-            }
-        }
-
-        // REMOVE COMMENT TAGS TO TEST WITH DEEPLENS
         // function runPolling() {
-        //     //remember to activate the model
-        //     const AWS = require('aws-sdk');
-        //     AWS.config.update({
-        //         "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
-        //         "secretAccessKey": "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",
-        //         "region": "ap-northeast-1"
-        //     });
-        //     var lambda = new AWS.Lambda();
-        //     var params = {
-        //         FunctionName: 'Bus-Number-cloud', /* required */
-        //         Payload: null
-        //     };
-        //     lambda.invoke(params, function (err, data) {
-        //         if (err)
-        //             console.log(err, err.stack); // an error occurred
-        //         else
-        //             if (busNumber === data) {
-        //                 setFormSuccess(false)
-        //                 setArrivalSuccess(true)
-        //                 speakText(busNumber)
-        //                 sendMessage(busNumber)
-        //                 receiveMessage()
-        //                 console.log(data);           // successful response
-        //             }
-        //             else {
-        //                 setFormSuccess(true)
-        //                 setArrivalSuccess(false)
-        //                 setTimeout(runPolling, 2000);
-        //             }
-        //     });
+        //     if (busNumber === '962') {//replace 983 with Modeldata busNo in the future
+        //         //Using SQS Queue in Singapore region, not Tokyo atm       
+        //         retrieveRekognitionData(busNumber)
+        //         setFormSuccess(false)
+        //         setArrivalSuccess(true)
+        //         speakText(busNumber)
+        //     } else {
+        //         setFormSuccess(true)
+        //         setArrivalSuccess(false)
+        //         setTimeout(runPolling, 5000);
+        //     }
         // }
+
+        //REMOVE COMMENT TAGS TO TEST WITH DEEPLENS
+        function runPolling() {
+            //remember to activate the model
+            const AWS = require('aws-sdk');
+            AWS.config.update({
+                "accessKeyId": "AKIA4URMTOCRMV4F6A4X",
+                "secretAccessKey": "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",
+                "region": "ap-northeast-1"
+            });
+            var lambda = new AWS.Lambda();
+            var params = {
+                FunctionName: 'Bus-Number-cloud', /* required */
+                Payload: null
+            };
+            lambda.invoke(params, function (err, data) {
+                if (err)
+                    console.log(err, err.stack); // an error occurred
+                else
+                    if (busNumber === data) {
+                        setFormSuccess(false)
+                        setArrivalSuccess(true)
+                        speakText(busNumber)
+                        sendMessage(busNumber)
+                        receiveMessage()
+                        console.log(data);           // successful response
+                    }
+                    else {
+                        setFormSuccess(true)
+                        setArrivalSuccess(false)
+                        setTimeout(runPolling, 2000);
+                    }
+            });
+        }
     }
     // function playRaspPi(busNumber) {
     //     var Stream = require('stream');
