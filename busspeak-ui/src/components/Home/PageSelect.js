@@ -8,9 +8,6 @@ const PageSelect = () => (
                     <GotoPageButton faIcon="volume-high" text="Ring for me" desc="Play a jingle to know that you're at the right stop" link={'/ring'} />
                 </div>
                 <div className="column is-half">
-                    <GotoPageButton faIcon="comments" text="Get directions" desc="Find directions to your destination" />
-                </div>
-                <div className="column is-half">
                     <GotoPageButton faIcon="bus" text="Wait for bus" desc="Know when your bus arrives effortlessly" link={'/busarrival'} />
                 </div>
                 {/* <div className="column is-half">
