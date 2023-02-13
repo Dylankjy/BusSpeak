@@ -1,55 +1,57 @@
-const S3CustomLabels = {
-  CustomLabels: [
-    {
-      Name: 'busNumber',
-      Confidence: 38.54399871826172,
-      Geometry: [Object]
-    }
-  ],
-  ResponseMetadata: {
-    RequestId: 'ffe442fb-13fa-417f-a659-4e198f7034d0',
-    HTTPStatusCode: 200,
-    HTTPHeaders: {
-      'x-amzn-requestid': 'ffe442fb-13fa-417f-a659-4e198f7034d0',
-      'content-type': 'application/x-amz-json-1.1',
-      'content-length': '208',
-      date: 'Fri, 06 Jan 2023 08:28:28 GMT'
-    },
-    RetryAttempts: 0
-  }
-}
 
-const S3CustomLabelText = {
-  TextDetections: [
-    {
-      DetectedText: '983',
-      Type: 'LINE',
-      Id: 0,
-      Confidence: 99.81364440917969,
-      Geometry: [Object]
-    },
-    {
-      DetectedText: '983',
-      Type: 'WORD',
-      Id: 1,
-      ParentId: 0,
-      Confidence: 99.81364440917969,
-      Geometry: [Object]
-    }
-  ],
-  TextModelVersion: '3.0',
-  ResponseMetadata: {
-    RequestId: 'ecdffd95-4f5a-415b-bf32-fa5479ccedd0',
-    HTTPStatusCode: 200,
-    HTTPHeaders: {
-      'x-amzn-requestid': 'ecdffd95-4f5a-415b-bf32-fa5479ccedd0',
-      'content-type': 'application/x-amz-json-1.1',
-      'content-length': '900',
-      date: 'Fri, 06 Jan 2023 08:28:29 GMT'
-    },
-    RetryAttempts: 0
-  }
-}
+
+// const S3CustomLabels = {
+//   CustomLabels: [
+//     {
+//       Name: 'busNumber',
+//       Confidence: 38.54399871826172,
+//       Geometry: [Object]
+//     }
+//   ],
+//   ResponseMetadata: {
+//     RequestId: 'ffe442fb-13fa-417f-a659-4e198f7034d0',
+//     HTTPStatusCode: 200,
+//     HTTPHeaders: {
+//       'x-amzn-requestid': 'ffe442fb-13fa-417f-a659-4e198f7034d0',
+//       'content-type': 'application/x-amz-json-1.1',
+//       'content-length': '208',
+//       date: 'Fri, 06 Jan 2023 08:28:28 GMT'
+//     },
+//     RetryAttempts: 0
+//   }
+// }
+
+// const S3CustomLabelText = {
+//   TextDetections: [
+//     {
+//       DetectedText: '983',
+//       Type: 'LINE',
+//       Id: 0,
+//       Confidence: 99.81364440917969,
+//       Geometry: [Object]
+//     },
+//     {
+//       DetectedText: '983',
+//       Type: 'WORD',
+//       Id: 1,
+//       ParentId: 0,
+//       Confidence: 99.81364440917969,
+//       Geometry: [Object]
+//     }
+//   ],
+//   TextModelVersion: '3.0',
+//   ResponseMetadata: {
+//     RequestId: 'ecdffd95-4f5a-415b-bf32-fa5479ccedd0',
+//     HTTPStatusCode: 200,
+//     HTTPHeaders: {
+//       'x-amzn-requestid': 'ecdffd95-4f5a-415b-bf32-fa5479ccedd0',
+//       'content-type': 'application/x-amz-json-1.1',
+//       'content-length': '900',
+//       date: 'Fri, 06 Jan 2023 08:28:29 GMT'
+//     },
+//     RetryAttempts: 0
+//   }
+// }
 
 // START RequestId: 1272d459-3cab-44e7-9f68-6d72a8bc46e2 Version: $LATEST
 // {'CustomLabels': [{'Name': 'busNumber', 'Confidence': 38.54399871826172, 'Geometry': {'BoundingBox': {'Width': 0.09378000348806381, 'Height': 0.10745000094175339, 'Left': 0.4156799912452698, 'Top': 0.09431999921798706}}}], 'ResponseMetadata': {'RequestId': 'ffe442fb-13fa-417f-a659-4e198f7034d0', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'ffe442fb-13fa-417f-a659-4e198f7034d0', 'content-type': 'application/x-amz-json-1.1', 'content-length': '208', 'date': 'Fri, 06 Jan 2023 08:28:28 GMT'}, 'RetryAttempts': 0}}
