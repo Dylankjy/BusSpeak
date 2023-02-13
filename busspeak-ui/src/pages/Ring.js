@@ -5,9 +5,9 @@ import LocationPrompt from "../components/Ring/LocationPrompt"
 
 import axios from "axios"
 
-import { useFormik } from 'formik';
 import LocatingLoading from "../components/Ring/Locating"
 import StopInfoModal from "../components/Ring/partials/StopInfoModal"
+import { useSearchParams } from "react-router-dom"
 
 const Ring = () => {
     const [userLocation, setUserLocation] = useState({
@@ -19,6 +19,10 @@ const Ring = () => {
     const [showLocatonPrompt, setShowLocationPrompt] = useState(false)
     const [nearbyStops, setNearbyStops] = useState([])
     const [nearbyLocation, setNearbyLocations] = useState(null)
+
+    // For handling preselected stop given by bot.
+    const [searchParams] = useSearchParams()
+    const [prefillStop] = useState(searchParams.get('stop'))
 
     useEffect(() => {
         let locationWatch = null
@@ -50,10 +54,32 @@ const Ring = () => {
             console.debug("Location info unavailable")
         }
 
+        // Handle pre-fill stops
+        if (prefillStop) {
+            console.log('Prefill stop was given')
+            toggleStopInfoModal(prefillStop)
+        }
+
         return () => {
             navigator.geolocation.clearWatch(locationWatch)
         }
     }, [])
+
+    const getStopInfo = async (stopID) => {
+        const res = await axios({
+            method: "post",
+            url: "https://gfegn6mkia.execute-api.ap-southeast-1.amazonaws.com/geo/get_stop",
+            data: {
+                stopID: stopID
+            },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "*/*",
+            }
+        })
+
+        return res.data
+    }
 
     // Whenever location updates, fetch nearby stops from Google Maps API
     useEffect(() => {
@@ -90,22 +116,6 @@ const Ring = () => {
 
     const [stopInfoModalData, setStopInfoModalData] = useState({})
     const [showStopInfoModal, setShowStopInfoModal] = useState(false)
-
-    const getStopInfo = async (stopID) => {
-        const res = await axios({
-            method: "post",
-            url: "https://gfegn6mkia.execute-api.ap-southeast-1.amazonaws.com/geo/get_stop",
-            data: {
-                stopID: stopID
-            },
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "*/*",
-            }
-        })
-
-        return res.data
-    }
 
     const toggleStopInfoModal = async (stopID) => {
         setShowStopInfoModal(true)
