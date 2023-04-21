@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "aws-sdk": "^2.1306.0",
+    "aws-sdk": "^2.1362.0",
     "axios": "^1.2.6",
     "bulma": "^0.9.4",
     "child_process": "^1.0.2",
